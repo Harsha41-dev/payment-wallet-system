@@ -16,6 +16,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.stockpro.wallet.wallets.WalletLedgerEntry;
 import com.stockpro.wallet.wallets.WalletSummary;
 
 @Service
@@ -48,6 +49,26 @@ public class PaytmWalletService {
 		}
 
 		return wallets.get(0);
+	}
+
+	public List<WalletLedgerEntry> getLedgerEntries(String walletId) {
+		getWallet(walletId);
+
+		return jdbcTemplate.query(
+				"select entry_id, transfer_id, wallet_id, entry_type, amount, balance_after, note, created_at "
+						+ "from wallet_ledger where wallet_id = :walletId order by entry_id desc",
+				new MapSqlParameterSource("walletId", walletId), (rs, rowNum) -> {
+					WalletLedgerEntry entry = new WalletLedgerEntry();
+					entry.setEntryId(rs.getLong("entry_id"));
+					entry.setTransferId(rs.getString("transfer_id"));
+					entry.setWalletId(rs.getString("wallet_id"));
+					entry.setEntryType(rs.getString("entry_type"));
+					entry.setAmount(rs.getBigDecimal("amount"));
+					entry.setBalanceAfter(rs.getBigDecimal("balance_after"));
+					entry.setNote(rs.getString("note"));
+					entry.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+					return entry;
+				});
 	}
 
 	public void prepareDebit(String transferId, String walletId, BigDecimal amount, String note) {

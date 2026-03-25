@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,9 +29,19 @@ public class WalletController {
 		return paytmWalletService.getWallets();
 	}
 
+	@GetMapping("/paytm/{walletId}/ledger")
+	public List<WalletLedgerEntry> getPaytmLedger(@PathVariable String walletId) {
+		return paytmWalletService.getLedgerEntries(walletId);
+	}
+
 	@GetMapping("/uber")
 	public List<WalletSummary> getUberWallets() {
 		return uberWalletService.getWallets();
+	}
+
+	@GetMapping("/uber/{walletId}/ledger")
+	public List<WalletLedgerEntry> getUberLedger(@PathVariable String walletId) {
+		return uberWalletService.getLedgerEntries(walletId);
 	}
 
 	@GetMapping("/summary")

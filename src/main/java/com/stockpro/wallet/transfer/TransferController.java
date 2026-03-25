@@ -56,6 +56,12 @@ public class TransferController {
 		return transferStore.getTransferDetails(transferId);
 	}
 
+	@GetMapping("/{transferId}/steps")
+	public List<TransferStepRecord> getTransferSteps(@PathVariable String transferId) {
+		transferStore.getTransfer(transferId);
+		return transferStore.getTransferSteps(transferId);
+	}
+
 	private void prepareRequest(TransferRequest request) {
 		request.setFromWallet(request.getFromWallet().trim());
 		request.setToWallet(request.getToWallet().trim());
