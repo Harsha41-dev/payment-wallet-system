@@ -78,6 +78,18 @@ Get wallet summary:
 GET /api/wallets/summary
 ```
 
+Get Paytm wallet ledger:
+
+```http
+GET /api/wallets/paytm/PAYTM_USER_1/ledger
+```
+
+Get Uber wallet ledger:
+
+```http
+GET /api/wallets/uber/UBER_DRIVER_1/ledger
+```
+
 Reset demo data:
 
 ```http
@@ -135,4 +147,10 @@ Get one transfer:
 
 ```http
 GET /api/transfers/{transferId}
+```
+
+Get only transfer steps:
+
+```http
+GET /api/transfers/{transferId}/steps
 ```
